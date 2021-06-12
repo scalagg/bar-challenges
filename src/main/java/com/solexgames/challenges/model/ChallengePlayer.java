@@ -4,7 +4,6 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.tracker.DataTracker;
-import com.solexgames.challenges.tracker.impl.KillsDataTracker;
 import com.solexgames.challenges.util.DateValidationUtil;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
@@ -14,7 +13,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
