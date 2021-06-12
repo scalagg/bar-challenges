@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 /**
  * Player profile where data is saved.
@@ -45,7 +46,7 @@ public class ChallengePlayer {
     }
 
     public void savePlayerData(boolean remove) {
-        CompletableFuture.runAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("uuid", this.uuid.toString()), this.getDocument(), new ReplaceOptions().upsert(true)));
+        CompletableFuture.runAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(), new ReplaceOptions().upsert(true)));
 
         if (remove) {
             BarChallengesPlugin.getInstance().getPlayerHandler().getPlayerTypeMap().remove(this.getUuid());
@@ -65,19 +66,25 @@ public class ChallengePlayer {
     }
 
     private void loadPlayerData() {
-        CompletableFuture.supplyAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
+        CompletableFuture.supplyAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first())
                 .thenAccept(document -> {
                     try {
                         if (document == null) {
                             this.resetAndAddDefaultDataTrackers();
+
+                            Logger.getGlobal().info("[Challenges] Document was null for " + this.name + ".");
                             return;
                         }
 
                         this.dataTrackers = document.getList("data", DataTracker.class);
                         this.lastLogin = document.getLong("lastLogin");
 
+                        boolean hasAddedDefault = false;
+
                         if (this.dataTrackers.isEmpty()) {
                             this.resetAndAddDefaultDataTrackers();
+
+                            hasAddedDefault = true;
                         }
 
                         final Date lastLogonDate = new Date(this.lastLogin);
@@ -85,6 +92,12 @@ public class ChallengePlayer {
 
                         if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
                             this.resetAndAddDefaultDataTrackers();
+
+                            hasAddedDefault = true;
+                        }
+
+                        if (!hasAddedDefault) {
+                            this.checkForNewDataTrackers();
                         }
                     } catch (Exception ignored) {
                         ignored.printStackTrace();
