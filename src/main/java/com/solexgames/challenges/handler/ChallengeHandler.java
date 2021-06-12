@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 public class ChallengeHandler {
 
-    private final Set<DailyChallenge> registeredChallenges = new HashSet<>();
+    private final Set<DailyChallenge<?>> registeredChallenges = new HashSet<>();
 
     public ChallengeHandler() {
         this.registeredChallenges.add(new TenKillsChallenge());

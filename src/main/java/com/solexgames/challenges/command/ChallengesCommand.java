@@ -1,5 +1,6 @@
 package com.solexgames.challenges.command;
 
+import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.menu.ChallengeViewMenu;
 import com.solexgames.core.command.BaseCommand;
 import com.solexgames.core.command.annotation.Command;
@@ -17,6 +18,10 @@ import org.bukkit.entity.Player;
         hidden = false
 )
 public class ChallengesCommand extends BaseCommand {
+
+    public ChallengesCommand() {
+        super(BarChallengesPlugin.getInstance());
+    }
 
     @Override
     public boolean command(CommandSender commandSender, String s, String[] strings) {

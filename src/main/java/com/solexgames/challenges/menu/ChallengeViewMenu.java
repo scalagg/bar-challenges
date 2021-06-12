@@ -59,8 +59,9 @@ public class ChallengeViewMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            final List<String> stringList = new ArrayList<>(Arrays.asList(BetterStringUtils.wrap(this.dailyChallenge.getDescription(), 25)));
+            final List<String> stringList = new ArrayList<>();
 
+            stringList.add(ChatColor.GRAY + this.dailyChallenge.getDescription());
             stringList.add(" ");
             stringList.add(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Goal:");
             stringList.add(ChatColor.GRAY + " - " + this.dailyChallenge.getGoal());
@@ -71,7 +72,7 @@ public class ChallengeViewMenu extends PaginatedMenu {
                     .map(challengeReward -> ChatColor.GRAY + " - " + challengeReward.getDescription())
                     .forEach(stringList::add);
 
-            final DataTracker dataTracker = this.challengePlayer.getDataTrackerByClass(this.dailyChallenge.getTrackerType());
+            final DataTracker dataTracker = this.challengePlayer.getTrackerByClass(this.dailyChallenge.getTrackerType());
             final boolean hasCompleted = dataTracker.hasCompleted(this.dailyChallenge.getRequirementToComplete());
 
             stringList.add(" ");
@@ -79,6 +80,7 @@ public class ChallengeViewMenu extends PaginatedMenu {
 
             return new ItemBuilder(Material.INK_SACK)
                     .setDisplayName(Color.SECONDARY_COLOR + this.dailyChallenge.getName())
+                    .setDurability(hasCompleted ? 10 : 8)
                     .addLore(stringList)
                     .create();
         }

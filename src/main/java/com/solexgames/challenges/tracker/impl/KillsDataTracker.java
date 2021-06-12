@@ -3,6 +3,7 @@ package com.solexgames.challenges.tracker.impl;
 import com.solexgames.challenges.tracker.DataTracker;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author GrowlyX
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
  */
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class KillsDataTracker implements DataTracker {
 

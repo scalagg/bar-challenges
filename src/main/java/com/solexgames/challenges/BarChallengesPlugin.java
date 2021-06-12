@@ -1,8 +1,10 @@
 package com.solexgames.challenges;
 
+import com.solexgames.challenges.command.ChallengesCommand;
 import com.solexgames.challenges.handler.ChallengeHandler;
 import com.solexgames.challenges.handler.MongoHandler;
 import com.solexgames.challenges.handler.PlayerHandler;
+import com.solexgames.challenges.listener.PlayerListener;
 import com.solexgames.challenges.task.DailyCheckTask;
 import com.solexgames.lib.commons.model.CommonsPlugin;
 import lombok.Getter;
@@ -27,6 +29,9 @@ public final class BarChallengesPlugin extends CommonsPlugin {
         this.playerHandler = new PlayerHandler();
         this.challengeHandler = new ChallengeHandler();
 
+        this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+
+        new ChallengesCommand();
         new DailyCheckTask()
                 .runTaskTimerAsynchronously(this, 0L, TimeUnit.MINUTES.toMillis(5L));
     }
