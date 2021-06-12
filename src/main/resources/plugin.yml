@@ -1,0 +1,8 @@
+name: Challenges
+version: dev
+main: com.solexgames.challenges.BarChallengesPlugin
+
+author: SolexGames
+website: https://solexgames.com
+
+depend: [commonlibs-bukkit, Scandium]
