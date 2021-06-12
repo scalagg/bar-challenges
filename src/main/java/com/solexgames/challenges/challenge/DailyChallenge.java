@@ -16,7 +16,7 @@ public interface DailyChallenge<K> {
 
     String getGoal();
 
-    String getDescription();
+    String[] getDescription();
 
     K getRequirementToComplete();
 

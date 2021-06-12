@@ -58,9 +58,8 @@ public class ChallengeViewMenu extends PaginatedMenu {
 
         @Override
         public ItemStack getButtonItem(Player player) {
-            final List<String> stringList = new ArrayList<>();
+            final List<String> stringList = new ArrayList<>(Arrays.asList(this.dailyChallenge.getDescription()));
 
-            stringList.add(ChatColor.GRAY + this.dailyChallenge.getDescription());
             stringList.add(" ");
             stringList.add(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Goal:");
             stringList.add(ChatColor.GRAY + " - " + this.dailyChallenge.getGoal());

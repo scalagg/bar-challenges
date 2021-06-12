@@ -1,6 +1,7 @@
 package com.solexgames.challenges.handler;
 
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.solexgames.core.CorePlugin;
@@ -23,9 +24,9 @@ public class MongoHandler {
     private MongoCollection<Document> playerCollection;
 
     public MongoHandler() {
-        this.client = CorePlugin.getInstance().getCoreDatabase().getClient();
-        this.database = this.client.getDatabase("SGSoftware");
+        this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
+        this.database = this.client.getDatabase(CorePlugin.getInstance().getDatabaseConfig().getConfiguration().getString("mongodb.database", "SGSoftware"));
 
-        this.playerCollection = this.database.getCollection("Challenges");
+        this.playerCollection = this.database.getCollection("challenges");
     }
 }

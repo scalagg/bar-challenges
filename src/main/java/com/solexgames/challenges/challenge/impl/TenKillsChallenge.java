@@ -24,13 +24,15 @@ public class TenKillsChallenge implements DailyChallenge<Integer> {
 
     @Override
     public String getGoal() {
-        return "Get your first 10 kills today on Practice";
+        return "Get your first 10 kills today";
     }
 
     @Override
-    public String getDescription() {
-        return ChatColor.GRAY + "Start off the day with getting 10" + "\n" +
-                ChatColor.GRAY + "kills on any ladders and any queues.";
+    public String[] getDescription() {
+        return new String[]{
+                ChatColor.GRAY + "Start off the day with getting 10",
+                ChatColor.GRAY + "kills on any ladders and any queues."
+        };
     }
 
     @Override

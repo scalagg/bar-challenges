@@ -5,6 +5,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.tracker.DataTracker;
 import com.solexgames.challenges.util.DateValidationUtil;
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,7 +49,7 @@ public class ChallengePlayer {
     }
 
     public void savePlayerData(boolean remove) {
-        CompletableFuture.runAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("_id", this.uuid), this.getDocument(), new ReplaceOptions().upsert(true)));
+        CompletableFuture.runAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("uuid", this.uuid.toString()), this.getDocument(), new ReplaceOptions().upsert(true)));
 
         if (remove) {
             BarChallengesPlugin.getInstance().getPlayerHandler().getPlayerTypeMap().remove(this.getUuid());
@@ -61,48 +62,55 @@ public class ChallengePlayer {
         document.put("uuid", this.uuid.toString());
         document.put("name", this.name);
 
-        document.put("data", this.dataTrackers);
+        final List<String> dataTrackers = new ArrayList<>();
+
+        this.dataTrackers.forEach(dataTracker -> {
+            dataTrackers.add(CorePlugin.GSON.toJson(dataTracker));
+        });
+
+        document.put("data", dataTrackers);
         document.put("lastLogin", System.currentTimeMillis());
 
         return document;
     }
 
     private void loadPlayerData() {
-        CompletableFuture.supplyAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("_id", this.uuid)).first())
+        CompletableFuture.supplyAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
                 .thenAccept(document -> {
-                    try {
-                        if (document == null) {
-                            this.resetAndAddDefaultDataTrackers();
+                    if (document == null) {
+                        this.resetAndAddDefaultDataTrackers();
 
-                            Logger.getGlobal().info("[Challenges] Document was null for " + this.name + ".");
-                            return;
-                        }
+                        Logger.getGlobal().info("[Challenges] Document was null for " + this.name + ".");
+                        return;
+                    }
 
-                        this.dataTrackers = document.getList("data", DataTracker.class);
-                        this.lastLogin = document.getLong("lastLogin");
+                    final List<String> dataTrackers = document.getList("data", String.class);
 
-                        boolean hasAddedDefault = false;
+                    dataTrackers.forEach(dataTracker -> {
+                        this.dataTrackers.add(CorePlugin.GSON.fromJson(dataTracker, DataTracker.class));
+                    });
 
-                        if (this.dataTrackers.isEmpty()) {
-                            this.resetAndAddDefaultDataTrackers();
+                    this.lastLogin = document.getLong("lastLogin");
 
-                            hasAddedDefault = true;
-                        }
+                    boolean hasAddedDefault = false;
 
-                        final Date lastLogonDate = new Date(this.lastLogin);
-                        final Date currentDate = new Date();
+                    if (this.dataTrackers.isEmpty()) {
+                        this.resetAndAddDefaultDataTrackers();
 
-                        if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
-                            this.resetAndAddDefaultDataTrackers();
+                        hasAddedDefault = true;
+                    }
 
-                            hasAddedDefault = true;
-                        }
+                    final Date lastLogonDate = new Date(this.lastLogin);
+                    final Date currentDate = new Date();
 
-                        if (!hasAddedDefault) {
-                            this.checkForNewDataTrackers();
-                        }
-                    } catch (Exception ignored) {
-                        ignored.printStackTrace();
+                    if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
+                        this.resetAndAddDefaultDataTrackers();
+
+                        hasAddedDefault = true;
+                    }
+
+                    if (!hasAddedDefault) {
+                        this.checkForNewDataTrackers();
                     }
                 });
     }
