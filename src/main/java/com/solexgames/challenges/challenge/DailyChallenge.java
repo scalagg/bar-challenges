@@ -1,6 +1,7 @@
 package com.solexgames.challenges.challenge;
 
 import com.solexgames.challenges.reward.ChallengeReward;
+import com.solexgames.challenges.tracker.DataTracker;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @since 6/12/2021
  */
 
-public interface DailyChallenge {
+public interface DailyChallenge<K> {
 
     String getName();
 
@@ -17,6 +18,10 @@ public interface DailyChallenge {
 
     String getDescription();
 
+    K getRequirementToComplete();
+
     List<ChallengeReward> getRewards();
+
+    Class<? extends DataTracker> getTrackerType();
 
 }

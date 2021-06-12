@@ -8,4 +8,9 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 public class DailyCheckTask extends BukkitRunnable {
+
+    @Override
+    public void run() {
+
+    }
 }

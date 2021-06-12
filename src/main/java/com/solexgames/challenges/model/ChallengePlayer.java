@@ -5,6 +5,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.challenge.DailyChallenge;
 import com.solexgames.challenges.tracker.DataTracker;
+import com.solexgames.challenges.tracker.impl.KillsDataTracker;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -13,7 +14,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Player profile where statistics are saved.
+ * Player profile where data is saved.
  * <p></p>
  *
  * @author GrowlyX
@@ -24,11 +25,13 @@ import java.util.concurrent.CompletableFuture;
 @Setter
 public class ChallengePlayer {
 
-    private final Map<DailyChallenge, ChallengeData> dataMap = new HashMap<>();
-    private final Set<DataTracker> dataTrackerSet = new HashSet<>();
+    private Map<DailyChallenge, ChallengeData> dataMap = new HashMap<>();
+    private List<DataTracker> dataTrackers = new ArrayList<>();
 
     private final UUID uuid;
     private final String name;
+
+    private long lastLogin;
 
     public ChallengePlayer(UUID uuid, String name) {
         this.uuid = uuid;
@@ -51,17 +54,32 @@ public class ChallengePlayer {
         document.put("uuid", this.uuid.toString());
         document.put("name", this.name);
 
+        document.put("data", this.dataTrackers);
+        document.put("lastLogin", System.currentTimeMillis());
+
         return document;
     }
 
     private void loadPlayerData() {
         CompletableFuture.supplyAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
                 .thenAccept(document -> {
+                    if (document == null) {
+                        this.setupDefaultDataTrackers();
+                        return;
+                    }
 
+                    this.dataTrackers = document.getList("data", DataTracker.class);
+                    this.lastLogin = document.getLong("lastLogin");
                 });
     }
 
-    public void getDataTracker(String name) {
+    public void setupDefaultDataTrackers() {
+        this.dataTrackers.add(new KillsDataTracker());
+    }
 
+    public DataTracker getDataTrackerByClass(Class<? extends DataTracker> trackerClass) {
+        return this.dataTrackers.stream()
+                .filter(dataTracker -> dataTracker.getClass().equals(trackerClass))
+                .findFirst().orElse(null);
     }
 }

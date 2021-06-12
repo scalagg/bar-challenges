@@ -24,13 +24,13 @@ public class ChallengeData {
     private final ChallengeReward reward;
     private final String dataTrackerType;
 
-    public DataTracker<?> getTracker() {
+    public DataTracker getTracker() {
         final Player player = Bukkit.getPlayer(this.target);
 
         if (player != null) {
             final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(player);
 
-            return challengePlayer.getDataTrackerSet().stream()
+            return challengePlayer.getDataTrackers().stream()
                     .filter(dataTracker -> dataTracker.getName().equals(this.dataTrackerType))
                     .findFirst().orElse(null);
         } else {

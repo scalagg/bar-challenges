@@ -2,7 +2,7 @@ package com.solexgames.challenges.tracker.impl;
 
 import com.solexgames.challenges.tracker.DataTracker;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
  * @author GrowlyX
@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
  */
 
 @Getter
-@RequiredArgsConstructor
-public class KillsDataTracker implements DataTracker<Integer> {
+@NoArgsConstructor
+public class KillsDataTracker implements DataTracker {
 
     private int currentKills;
 
@@ -21,7 +21,7 @@ public class KillsDataTracker implements DataTracker<Integer> {
     }
 
     @Override
-    public boolean hasCompleted(Integer data) {
-        return this.currentKills >= data;
+    public boolean hasCompleted(Object data) {
+        return data instanceof Integer && this.currentKills >= (Integer) data;
     }
 }

@@ -3,6 +3,9 @@ package com.solexgames.challenges.challenge.impl;
 import com.solexgames.challenges.challenge.DailyChallenge;
 import com.solexgames.challenges.reward.ChallengeReward;
 import com.solexgames.challenges.reward.impl.ExperienceReward;
+import com.solexgames.challenges.tracker.DataTracker;
+import com.solexgames.challenges.tracker.impl.KillsDataTracker;
+import org.bukkit.ChatColor;
 
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +15,7 @@ import java.util.List;
  * @since 6/12/2021
  */
 
-public class TenKillsChallenge implements DailyChallenge {
+public class TenKillsChallenge implements DailyChallenge<Integer> {
 
     @Override
     public String getName() {
@@ -26,11 +29,21 @@ public class TenKillsChallenge implements DailyChallenge {
 
     @Override
     public String getDescription() {
-        return "Start off the day with getting 10 kills on any ladders, and any queues.";
+        return ChatColor.GRAY + "Start off the day with getting 10 kills on any ladders, and any queues.";
+    }
+
+    @Override
+    public Integer getRequirementToComplete() {
+        return 10;
     }
 
     @Override
     public List<ChallengeReward> getRewards() {
         return Collections.singletonList(new ExperienceReward(100));
+    }
+
+    @Override
+    public Class<? extends DataTracker> getTrackerType() {
+        return KillsDataTracker.class;
     }
 }

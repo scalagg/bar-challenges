@@ -7,6 +7,8 @@ import com.solexgames.challenges.task.DailyCheckTask;
 import com.solexgames.lib.commons.model.CommonsPlugin;
 import lombok.Getter;
 
+import java.util.concurrent.TimeUnit;
+
 @Getter
 public final class BarChallengesPlugin extends CommonsPlugin {
 
@@ -25,6 +27,7 @@ public final class BarChallengesPlugin extends CommonsPlugin {
         this.playerHandler = new PlayerHandler();
         this.challengeHandler = new ChallengeHandler();
 
-        new DailyCheckTask();
+        new DailyCheckTask()
+                .runTaskTimerAsynchronously(this, 0L, TimeUnit.MINUTES.toMillis(5L));
     }
 }

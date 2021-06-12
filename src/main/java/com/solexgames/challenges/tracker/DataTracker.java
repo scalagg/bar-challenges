@@ -5,10 +5,10 @@ package com.solexgames.challenges.tracker;
  * @since 6/12/2021
  */
 
-public interface DataTracker<K> {
+public interface DataTracker {
 
     String getName();
 
-    boolean hasCompleted(K data);
+    boolean hasCompleted(Object data);
 
 }
