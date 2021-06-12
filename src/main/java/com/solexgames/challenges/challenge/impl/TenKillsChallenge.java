@@ -29,7 +29,8 @@ public class TenKillsChallenge implements DailyChallenge<Integer> {
 
     @Override
     public String getDescription() {
-        return ChatColor.GRAY + "Start off the day with getting 10 kills on any ladders, and any queues.";
+        return ChatColor.GRAY + "Start off the day with getting 10" + "\n" +
+                ChatColor.GRAY + "kills on any ladders and any queues.";
     }
 
     @Override

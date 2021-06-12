@@ -5,6 +5,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.tracker.DataTracker;
 import com.solexgames.challenges.tracker.impl.KillsDataTracker;
+import com.solexgames.challenges.util.DateValidationUtil;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,6 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Player profile where data is saved.
@@ -69,7 +69,7 @@ public class ChallengePlayer {
                 .thenAccept(document -> {
                     try {
                         if (document == null) {
-                            this.setupDefaultDataTrackers();
+                            this.resetAndAddDefaultDataTrackers();
                             return;
                         }
 
@@ -77,13 +77,14 @@ public class ChallengePlayer {
                         this.lastLogin = document.getLong("lastLogin");
 
                         if (this.dataTrackers.isEmpty()) {
-                            this.setupDefaultDataTrackers();
+                            this.resetAndAddDefaultDataTrackers();
                         }
 
                         final Date lastLogonDate = new Date(this.lastLogin);
+                        final Date currentDate = new Date();
 
-                        if (lastLogonDate.before(new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1L)))) {
-                            this.setupDefaultDataTrackers();
+                        if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
+                            this.resetAndAddDefaultDataTrackers();
                         }
                     } catch (Exception ignored) {
                         ignored.printStackTrace();
@@ -102,7 +103,7 @@ public class ChallengePlayer {
                         if (player != null) {
                             player.sendMessage(new String[]{
                                     Color.SECONDARY_COLOR + "You've completed today's daily challenge of getting " + Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + "!",
-                                    ChatColor.GRAY + ChatColor.ITALIC.toString() + "We will assign you your rewards shortly!"
+                                    ChatColor.GRAY + ChatColor.ITALIC.toString() + "Your rewards will be distributed shortly."
                             });
 
                             dailyChallenge.getRewards().forEach(challengeReward -> challengeReward.giveTo(player));
@@ -111,9 +112,33 @@ public class ChallengePlayer {
                 });
     }
 
-    public void setupDefaultDataTrackers() {
+    public void resetAndAddDefaultDataTrackers() {
         this.dataTrackers.clear();
-        this.dataTrackers.add(new KillsDataTracker());
+
+        BarChallengesPlugin.getInstance().getDataTrackerHandler().getDataTrackerClasses()
+                .forEach(this::registerTrackerByClass);
+    }
+
+    public void checkForNewDataTrackers() {
+        BarChallengesPlugin.getInstance().getDataTrackerHandler().getDataTrackerClasses()
+                .forEach(aClass -> {
+                    final DataTracker dataTracker = this.dataTrackers.stream()
+                            .filter(tracker -> tracker.getClass().equals(aClass))
+                            .findFirst().orElse(null);
+
+                    if (dataTracker == null) {
+                        this.registerTrackerByClass(aClass);
+                    }
+                });
+    }
+
+    public void registerTrackerByClass(Class<?> clazz) {
+        try {
+            this.dataTrackers.add((DataTracker) clazz.newInstance());
+        } catch (Exception exception) {
+            // it should never throw an exception
+            exception.printStackTrace();
+        }
     }
 
     public <T extends DataTracker> T getTrackerByClass(Class<T> clazz) {

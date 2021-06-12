@@ -4,7 +4,6 @@ import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.challenge.DailyChallenge;
 import com.solexgames.challenges.model.ChallengePlayer;
 import com.solexgames.challenges.tracker.DataTracker;
-import com.solexgames.challenges.util.BetterStringUtils;
 import com.solexgames.core.util.Color;
 import com.solexgames.core.util.builder.ItemBuilder;
 import com.solexgames.core.util.external.Button;
@@ -81,8 +80,7 @@ public class ChallengeViewMenu extends PaginatedMenu {
             return new ItemBuilder(Material.INK_SACK)
                     .setDisplayName(Color.SECONDARY_COLOR + this.dailyChallenge.getName())
                     .setDurability(hasCompleted ? 10 : 8)
-                    .addLore(stringList)
-                    .create();
+                    .addLore(stringList).create();
         }
     }
 }

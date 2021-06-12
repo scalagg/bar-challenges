@@ -1,0 +1,8 @@
+challenges:
+  impl:
+    registration:
+      - "com.solexgames.challenges.challenge.impl"
+data-tracker:
+  impl:
+    registration:
+      - "com.solexgames.challenges.tracker.impl"
