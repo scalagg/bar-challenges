@@ -36,13 +36,15 @@ public class TenKillsChallenge implements DailyChallenge<Integer> {
     }
 
     @Override
-    public Integer getRequirementToComplete() {
+    public Integer getCompletionRequirement() {
         return 10;
     }
 
     @Override
     public List<ChallengeReward> getRewards() {
-        return Collections.singletonList(new ExperienceReward(100));
+        return Collections.singletonList(
+                new ExperienceReward(100)
+        );
     }
 
     @Override

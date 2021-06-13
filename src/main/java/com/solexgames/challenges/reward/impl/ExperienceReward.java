@@ -23,7 +23,7 @@ public class ExperienceReward implements ChallengeReward {
 
     @Override
     public String getDescription() {
-        return this.amount + " experience will be added to your profile!";
+        return "Receive " + this.amount + " experience";
     }
 
     @Override

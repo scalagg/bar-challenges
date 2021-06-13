@@ -24,7 +24,7 @@ public class ChallengesCommand extends BaseCommand {
     }
 
     @Override
-    public boolean command(CommandSender commandSender, String s, String[] strings) {
+    public boolean command(CommandSender commandSender, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
             commandSender.sendMessage(this.ONLY_PLAYERS);
             return false;

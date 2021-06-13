@@ -60,18 +60,18 @@ public class ChallengeViewMenu extends PaginatedMenu {
         public ItemStack getButtonItem(Player player) {
             final List<String> stringList = new ArrayList<>(Arrays.asList(this.dailyChallenge.getDescription()));
 
+            final DataTracker dataTracker = this.challengePlayer.getTrackerByClass(this.dailyChallenge.getTrackerType());
+            final boolean hasCompleted = dataTracker.hasCompleted(this.dailyChallenge.getCompletionRequirement());
+
             stringList.add(" ");
             stringList.add(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Goal:");
-            stringList.add(ChatColor.GRAY + " - " + this.dailyChallenge.getGoal());
+            stringList.add(ChatColor.GRAY + " - " + this.dailyChallenge.getGoal() + " " + dataTracker.getStatusMessage(this.dailyChallenge.getCompletionRequirement()));
             stringList.add(" ");
             stringList.add(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Rewards:");
 
             this.dailyChallenge.getRewards().stream()
                     .map(challengeReward -> ChatColor.GRAY + " - " + challengeReward.getDescription())
                     .forEach(stringList::add);
-
-            final DataTracker dataTracker = this.challengePlayer.getTrackerByClass(this.dailyChallenge.getTrackerType());
-            final boolean hasCompleted = dataTracker.hasCompleted(this.dailyChallenge.getRequirementToComplete());
 
             stringList.add(" ");
             stringList.add(hasCompleted ? ChatColor.GREEN + "[You've finished this challenge today]" : ChatColor.YELLOW + "[You're working on this challenge]");

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.solexgames.challenges.adapter.DataTrackerAdapter;
 import com.solexgames.challenges.challenge.DailyChallenge;
 import com.solexgames.challenges.command.ChallengesCommand;
+import com.solexgames.challenges.command.DataTrackerCommand;
 import com.solexgames.challenges.handler.ChallengeHandler;
 import com.solexgames.challenges.handler.DataTrackerHandler;
 import com.solexgames.challenges.handler.MongoHandler;
@@ -67,6 +68,8 @@ public final class BarChallengesPlugin extends CommonsPlugin {
                 });
 
         new ChallengesCommand();
+        new DataTrackerCommand();
+
         new DailyCheckTask()
                 .runTaskTimerAsynchronously(this, 0L, TimeUnit.MINUTES.toMillis(5L));
     }

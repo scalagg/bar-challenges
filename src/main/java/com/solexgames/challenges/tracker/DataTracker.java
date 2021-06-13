@@ -11,4 +11,6 @@ public interface DataTracker {
 
     boolean hasCompleted(Object data);
 
+    String getStatusMessage(Object data);
+
 }

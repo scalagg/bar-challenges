@@ -82,34 +82,30 @@ public class ChallengePlayer {
                         return;
                     }
 
-                    try {
-                        final List<String> dataTrackers = document.getList("dataTrackers", String.class);
+                    final List<String> dataTrackers = document.getList("dataTrackers", String.class);
 
-                        dataTrackers.forEach(dataTracker -> {
-                            final JsonObject jsonObject = new JsonParser().parse(dataTracker).getAsJsonObject();
-                            final String className = jsonObject.get("className").getAsString();
-                            final String classData = jsonObject.get("classData").getAsString();
+                    dataTrackers.forEach(dataTracker -> {
+                        final JsonObject jsonObject = new JsonParser().parse(dataTracker).getAsJsonObject();
+                        final String className = jsonObject.get("className").getAsString();
+                        final String classData = jsonObject.get("classData").getAsString();
 
-                            this.dataTrackers.add(BarChallengesPlugin.GSON.fromJson(classData, this.getTrackerByName(className)));
-                        });
+                        this.dataTrackers.add(BarChallengesPlugin.GSON.fromJson(classData, this.getTrackerByName(className)));
+                    });
 
-                        this.lastLogin = document.getLong("lastLogin");
+                    this.lastLogin = document.getLong("lastLogin");
 
-                        if (this.dataTrackers.isEmpty()) {
-                            this.resetAndAddDefaultDataTrackers();
-                        }
-
-                        final Date lastLogonDate = new Date(this.lastLogin);
-                        final Date currentDate = new Date();
-
-                        if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
-                            this.resetAndAddDefaultDataTrackers();
-                        }
-
-                        this.checkForNewDataTrackers();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (this.dataTrackers.isEmpty()) {
+                        this.resetAndAddDefaultDataTrackers();
                     }
+
+                    final Date lastLogonDate = new Date(this.lastLogin);
+                    final Date currentDate = new Date();
+
+                    if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
+                        this.resetAndAddDefaultDataTrackers();
+                    }
+
+                    this.checkForNewDataTrackers();
                 });
     }
 
@@ -118,7 +114,7 @@ public class ChallengePlayer {
                 .forEach(dailyChallenge -> {
                     final DataTracker dataTracker = this.getTrackerByClass(dailyChallenge.getTrackerType());
 
-                    if (dataTracker != null && dataTracker.hasCompleted(dailyChallenge.getRequirementToComplete())) {
+                    if (dataTracker != null && dataTracker.hasCompleted(dailyChallenge.getCompletionRequirement())) {
                         final Player player = Bukkit.getPlayer(this.uuid);
 
                         if (player != null) {

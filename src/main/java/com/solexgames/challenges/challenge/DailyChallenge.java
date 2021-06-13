@@ -10,7 +10,7 @@ import java.util.List;
  * @since 6/12/2021
  */
 
-public interface DailyChallenge<K> {
+public interface DailyChallenge<T> {
 
     String getName();
 
@@ -18,7 +18,7 @@ public interface DailyChallenge<K> {
 
     String[] getDescription();
 
-    K getRequirementToComplete();
+    T getCompletionRequirement();
 
     List<ChallengeReward> getRewards();
 
