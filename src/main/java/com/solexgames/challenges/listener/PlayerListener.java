@@ -4,7 +4,7 @@ import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.model.ChallengePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -15,10 +15,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerListener implements Listener {
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        final ChallengePlayer challengePlayer = new ChallengePlayer(event.getPlayer().getUniqueId(), event.getPlayer().getName());
-
-        BarChallengesPlugin.getInstance().getPlayerHandler().insert(challengePlayer.getUuid(), challengePlayer);
+    public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
+        BarChallengesPlugin.getInstance().getPlayerHandler().insert(event.getUniqueId(), new ChallengePlayer(event.getUniqueId(), event.getName()));
     }
 
     @EventHandler

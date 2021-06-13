@@ -40,5 +40,7 @@ public class DataTrackerHandler {
                         }
                     });
                 });
+
+        dataTrackerClasses.forEach(aClass -> System.out.println(aClass.getSimpleName()));
     }
 }

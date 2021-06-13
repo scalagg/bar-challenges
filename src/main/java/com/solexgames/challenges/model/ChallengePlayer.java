@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Getter
 @Setter
-@SuppressWarnings("all")
+//@SuppressWarnings("all")
 public class ChallengePlayer {
 
     private List<DataTracker> dataTrackers = new ArrayList<>();
@@ -65,7 +65,12 @@ public class ChallengePlayer {
         final List<String> dataTrackers = new ArrayList<>();
 
         this.dataTrackers.forEach(dataTracker -> {
-            dataTrackers.add(BarChallengesPlugin.GSON.toJson(dataTracker));
+            final JsonObject jsonObject = new JsonObject();
+
+            jsonObject.addProperty("className", dataTracker.getClass().getSimpleName());
+            jsonObject.addProperty("classData", BarChallengesPlugin.GSON.toJson(dataTracker));
+
+            dataTrackers.add(jsonObject.toString());
         });
 
         document.put("dataTrackers", dataTrackers);
