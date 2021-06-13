@@ -178,12 +178,6 @@ public class ChallengePlayer {
                 .findFirst().orElse(null);
     }
 
-    public <T> T getTrackerByClassName(String name) {
-        return (T) this.dataTrackers.stream()
-                .filter(dataTracker -> dataTracker.getClass().getSimpleName().equalsIgnoreCase(name))
-                .findFirst().orElse(null);
-    }
-
     public <T> T getTrackerByName(String name) {
         return (T) this.dataTrackers.stream()
                 .filter(dataTracker -> dataTracker.getName().equalsIgnoreCase(name))

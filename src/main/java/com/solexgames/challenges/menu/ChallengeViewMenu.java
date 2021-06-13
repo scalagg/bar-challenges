@@ -61,15 +61,6 @@ public class ChallengeViewMenu extends PaginatedMenu {
             final List<String> stringList = new ArrayList<>(Arrays.asList(this.dailyChallenge.getDescription()));
 
             final DataTracker dataTracker = this.challengePlayer.getTrackerByClass(this.dailyChallenge.getTrackerType());
-
-            if (this.dailyChallenge.getTrackerType() == null) {
-                System.out.println(this.dailyChallenge.getTrackerType() + " null!");
-            }
-
-            if (dataTracker == null) {
-                System.out.println(this.dailyChallenge.getTrackerType().getName() + " null!");
-            }
-
             final boolean hasCompleted = dataTracker.hasCompleted(this.dailyChallenge.getCompletionRequirement());
 
             stringList.add(" ");
