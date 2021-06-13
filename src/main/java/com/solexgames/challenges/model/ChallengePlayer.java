@@ -1,5 +1,6 @@
 package com.solexgames.challenges.model;
 
+import com.cryptomorin.xseries.XSound;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.client.model.Filters;
@@ -14,6 +15,7 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -127,9 +129,13 @@ public class ChallengePlayer {
 
                         if (player != null) {
                             player.sendMessage(new String[]{
+                                    "",
                                     Color.SECONDARY_COLOR + "You've completed today's daily challenge of getting " + Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + "!",
-                                    ChatColor.GRAY + ChatColor.ITALIC.toString() + "Your rewards will be distributed shortly."
+                                    ChatColor.GRAY + ChatColor.ITALIC.toString() + "You'll receive your rewards shortly!",
+                                    ""
                             });
+
+                            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player.getLocation());
 
                             dailyChallenge.getRewards().forEach(challengeReward -> challengeReward.giveTo(player));
                         }

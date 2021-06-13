@@ -1,16 +1,15 @@
 package com.solexgames.challenges.handler;
 
 import com.solexgames.challenges.BarChallengesPlugin;
-import com.solexgames.challenges.challenge.DailyChallenge;
 import com.solexgames.challenges.tracker.DataTracker;
 import com.solexgames.core.util.BukkitUtil;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * @author GrowlyX
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
+@SuppressWarnings("all")
 public class DataTrackerHandler {
 
     private final Set<Class<?>> dataTrackerClasses = new HashSet<>();
