@@ -2,7 +2,6 @@ package com.solexgames.challenges.util;
 
 import lombok.experimental.UtilityClass;
 
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -15,13 +14,13 @@ import java.util.Date;
 public class DateValidationUtil {
 
     public static boolean isSameDay(Date previous, Date newDate) {
-        final LocalDate prevLocalDate = previous.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        final LocalDate newLocalDate = newDate.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        final int prevYearDay = previous.toInstant()
+                .atZone(ZoneId.of("US/Eastern"))
+                .toLocalDate().getDayOfYear();
+        final int newYearDay = newDate.toInstant()
+                .atZone(ZoneId.of("US/Eastern"))
+                .toLocalDate().getDayOfYear();
 
-        return prevLocalDate.isEqual(newLocalDate);
+        return prevYearDay == newYearDay;
     }
 }
