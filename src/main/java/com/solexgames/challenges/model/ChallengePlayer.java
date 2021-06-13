@@ -7,6 +7,7 @@ import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.tracker.DataTracker;
 import com.solexgames.challenges.util.DateValidationUtil;
+import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Getter
 @Setter
-//@SuppressWarnings("all")
+@SuppressWarnings("all")
 public class ChallengePlayer {
 
     private List<DataTracker> dataTrackers = new ArrayList<>();
@@ -68,7 +69,7 @@ public class ChallengePlayer {
             final JsonObject jsonObject = new JsonObject();
 
             jsonObject.addProperty("className", dataTracker.getClass().getSimpleName());
-            jsonObject.addProperty("classData", BarChallengesPlugin.GSON.toJson(dataTracker));
+            jsonObject.addProperty("classData", CorePlugin.GSON.toJson(dataTracker));
 
             dataTrackers.add(jsonObject.toString());
         });
@@ -94,7 +95,9 @@ public class ChallengePlayer {
                         final String className = jsonObject.get("className").getAsString();
                         final String classData = jsonObject.get("classData").getAsString();
 
-                        this.dataTrackers.add(BarChallengesPlugin.GSON.fromJson(classData, this.getTrackerByName(className)));
+                        final DataTracker tracker = CorePlugin.GSON.fromJson(classData, BarChallengesPlugin.getInstance().getDataTrackerHandler().getTrackerByClassName(className));
+
+                        this.dataTrackers.add(tracker);
                     });
 
                     this.lastLogin = document.getLong("lastLogin");
@@ -163,13 +166,19 @@ public class ChallengePlayer {
         }
     }
 
-    public <T extends DataTracker> T getTrackerByClass(Class<T> clazz) {
+    public <T> T getTrackerByClass(Class<? extends DataTracker> clazz) {
         return (T) this.dataTrackers.stream()
-                .filter(dataTracker -> dataTracker.getClass().equals(clazz))
+                .filter(dataTracker -> clazz.equals(dataTracker.getClass()))
                 .findFirst().orElse(null);
     }
 
-    public <T extends DataTracker> T getTrackerByName(String name) {
+    public <T> T getTrackerByClassName(String name) {
+        return (T) this.dataTrackers.stream()
+                .filter(dataTracker -> dataTracker.getClass().getSimpleName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
+    }
+
+    public <T> T getTrackerByName(String name) {
         return (T) this.dataTrackers.stream()
                 .filter(dataTracker -> dataTracker.getName().equalsIgnoreCase(name))
                 .findFirst().orElse(null);

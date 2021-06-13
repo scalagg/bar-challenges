@@ -15,6 +15,7 @@ import com.solexgames.challenges.task.DailyCheckTask;
 import com.solexgames.core.util.BukkitUtil;
 import com.solexgames.lib.commons.model.CommonsPlugin;
 import lombok.Getter;
+import org.bukkit.event.Listener;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
@@ -56,11 +57,11 @@ public final class BarChallengesPlugin extends CommonsPlugin {
                     try {
                         final Object object = aClass.newInstance();
 
-                        if (object instanceof DailyChallenge) {
-                            this.getServer().getPluginManager().registerEvents((AbstractDataTrackerListener) aClass.newInstance(), this);
+                        if (object instanceof Listener) {
+                            this.getServer().getPluginManager().registerEvents((Listener) aClass.newInstance(), this);
                         }
                     } catch (Exception exception) {
-                        Logger.getGlobal().info("[Challenges] Couldn't register the challenge " + aClass.getSimpleName() + ".");
+                        Logger.getGlobal().info("[Challenges] Couldn't register the listener " + aClass.getSimpleName() + ".");
                     }
                 });
 

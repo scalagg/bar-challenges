@@ -40,7 +40,11 @@ public class DataTrackerHandler {
                         }
                     });
                 });
+    }
 
-        dataTrackerClasses.forEach(aClass -> System.out.println(aClass.getSimpleName()));
+    public Class<? extends DataTracker> getTrackerByClassName(String name) {
+        return (Class<? extends DataTracker>) this.dataTrackerClasses.stream()
+                .filter(aClass -> aClass.getSimpleName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
     }
 }
