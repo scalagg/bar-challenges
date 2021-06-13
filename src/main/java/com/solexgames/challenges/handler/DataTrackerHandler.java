@@ -40,7 +40,5 @@ public class DataTrackerHandler {
                         }
                     });
                 });
-
-        System.out.println(this.dataTrackerClasses.stream().map(Class::getSimpleName).collect(Collectors.joining(" ")));
     }
 }
