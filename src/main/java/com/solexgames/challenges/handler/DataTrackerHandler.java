@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * @author GrowlyX
@@ -39,5 +40,7 @@ public class DataTrackerHandler {
                         }
                     });
                 });
+
+        System.out.println(this.dataTrackerClasses.stream().map(Class::getSimpleName).collect(Collectors.joining(" ")));
     }
 }

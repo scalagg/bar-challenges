@@ -27,6 +27,6 @@ public class MongoHandler {
         this.client = new MongoClient(new MongoClientURI(CorePlugin.getInstance().getDatabaseConfig().getString("mongodb.url")));
         this.database = this.client.getDatabase(CorePlugin.getInstance().getDatabaseConfig().getConfiguration().getString("mongodb.database", "SGSoftware"));
 
-        this.playerCollection = this.database.getCollection("challenges");
+        this.playerCollection = this.database.getCollection("practice_challenges");
     }
 }

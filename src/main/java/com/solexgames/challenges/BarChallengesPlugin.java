@@ -1,5 +1,8 @@
 package com.solexgames.challenges;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.solexgames.challenges.adapter.DataTrackerAdapter;
 import com.solexgames.challenges.challenge.DailyChallenge;
 import com.solexgames.challenges.command.ChallengesCommand;
 import com.solexgames.challenges.handler.ChallengeHandler;
@@ -9,16 +12,21 @@ import com.solexgames.challenges.handler.PlayerHandler;
 import com.solexgames.challenges.listener.PlayerListener;
 import com.solexgames.challenges.listener.tracker.AbstractDataTrackerListener;
 import com.solexgames.challenges.task.DailyCheckTask;
+import com.solexgames.challenges.tracker.DataTracker;
 import com.solexgames.core.util.BukkitUtil;
 import com.solexgames.lib.commons.model.CommonsPlugin;
 import lombok.Getter;
-import org.bukkit.event.Listener;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 @Getter
 public final class BarChallengesPlugin extends CommonsPlugin {
+
+    public final static Gson GSON = new GsonBuilder()
+            .registerTypeHierarchyAdapter(DataTracker.class, new DataTrackerAdapter())
+            .disableHtmlEscaping()
+            .create();
 
     @Getter
     private static BarChallengesPlugin instance;

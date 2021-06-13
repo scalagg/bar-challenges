@@ -1,11 +1,12 @@
 package com.solexgames.challenges.model;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.tracker.DataTracker;
 import com.solexgames.challenges.util.DateValidationUtil;
-import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
 
 /**
  * Player profile where data is saved.
@@ -52,7 +52,7 @@ public class ChallengePlayer {
         CompletableFuture.runAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().replaceOne(Filters.eq("uuid", this.uuid.toString()), this.getDocument(), new ReplaceOptions().upsert(true)));
 
         if (remove) {
-            BarChallengesPlugin.getInstance().getPlayerHandler().getPlayerTypeMap().remove(this.getUuid());
+            BarChallengesPlugin.getInstance().getPlayerHandler().getPlayerTypeMap().remove(this.uuid);
         }
     }
 
@@ -65,10 +65,10 @@ public class ChallengePlayer {
         final List<String> dataTrackers = new ArrayList<>();
 
         this.dataTrackers.forEach(dataTracker -> {
-            dataTrackers.add(CorePlugin.GSON.toJson(dataTracker));
+            dataTrackers.add(BarChallengesPlugin.GSON.toJson(dataTracker));
         });
 
-        document.put("data", dataTrackers);
+        document.put("dataTrackers", dataTrackers);
         document.put("lastLogin", System.currentTimeMillis());
 
         return document;
@@ -79,38 +79,36 @@ public class ChallengePlayer {
                 .thenAccept(document -> {
                     if (document == null) {
                         this.resetAndAddDefaultDataTrackers();
-
-                        Logger.getGlobal().info("[Challenges] Document was null for " + this.name + ".");
                         return;
                     }
 
-                    final List<String> dataTrackers = document.getList("data", String.class);
+                    try {
+                        final List<String> dataTrackers = document.getList("dataTrackers", String.class);
 
-                    dataTrackers.forEach(dataTracker -> {
-                        this.dataTrackers.add(CorePlugin.GSON.fromJson(dataTracker, DataTracker.class));
-                    });
+                        dataTrackers.forEach(dataTracker -> {
+                            final JsonObject jsonObject = new JsonParser().parse(dataTracker).getAsJsonObject();
+                            final String className = jsonObject.get("className").getAsString();
+                            final String classData = jsonObject.get("classData").getAsString();
 
-                    this.lastLogin = document.getLong("lastLogin");
+                            this.dataTrackers.add(BarChallengesPlugin.GSON.fromJson(classData, this.getTrackerByName(className)));
+                        });
 
-                    boolean hasAddedDefault = false;
+                        this.lastLogin = document.getLong("lastLogin");
 
-                    if (this.dataTrackers.isEmpty()) {
-                        this.resetAndAddDefaultDataTrackers();
+                        if (this.dataTrackers.isEmpty()) {
+                            this.resetAndAddDefaultDataTrackers();
+                        }
 
-                        hasAddedDefault = true;
-                    }
+                        final Date lastLogonDate = new Date(this.lastLogin);
+                        final Date currentDate = new Date();
 
-                    final Date lastLogonDate = new Date(this.lastLogin);
-                    final Date currentDate = new Date();
+                        if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
+                            this.resetAndAddDefaultDataTrackers();
+                        }
 
-                    if (!DateValidationUtil.isSameDay(lastLogonDate, currentDate)) {
-                        this.resetAndAddDefaultDataTrackers();
-
-                        hasAddedDefault = true;
-                    }
-
-                    if (!hasAddedDefault) {
                         this.checkForNewDataTrackers();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
     }
@@ -167,6 +165,12 @@ public class ChallengePlayer {
     public <T extends DataTracker> T getTrackerByClass(Class<T> clazz) {
         return (T) this.dataTrackers.stream()
                 .filter(dataTracker -> dataTracker.getClass().equals(clazz))
+                .findFirst().orElse(null);
+    }
+
+    public <T extends DataTracker> T getTrackerByName(String name) {
+        return (T) this.dataTrackers.stream()
+                .filter(dataTracker -> dataTracker.getName().equalsIgnoreCase(name))
                 .findFirst().orElse(null);
     }
 }
