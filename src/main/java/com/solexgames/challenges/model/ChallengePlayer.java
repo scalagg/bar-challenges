@@ -15,7 +15,6 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -124,7 +123,7 @@ public class ChallengePlayer {
                 .forEach(dailyChallenge -> {
                     final DataTracker dataTracker = this.getTrackerByClass(dailyChallenge.getTrackerType());
 
-                    if (dataTracker != null && dataTracker.hasCompleted(dailyChallenge.getCompletionRequirement())) {
+                    if (dataTracker != null && dataTracker.canAchieve(dailyChallenge.getCompletionRequirement())&& !dataTracker.hasCompleted(dailyChallenge.getCompletionRequirement())) {
                         final Player player = Bukkit.getPlayer(this.uuid);
 
                         if (player != null) {

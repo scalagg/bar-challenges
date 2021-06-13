@@ -9,6 +9,8 @@ public interface DataTracker {
 
     String getName();
 
+    boolean canAchieve(Object data);
+
     boolean hasCompleted(Object data);
 
     String getStatusMessage(Object data);

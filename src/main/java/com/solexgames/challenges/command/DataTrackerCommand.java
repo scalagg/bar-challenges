@@ -59,7 +59,7 @@ public class DataTrackerCommand extends BaseCommand {
                                     .stream().filter(dailyChallenge1 -> dailyChallenge1.getName().equalsIgnoreCase(StringUtil.buildMessage(args, 3))).findFirst().orElse(null);
 
                             if (dailyChallenge != null) {
-                                player.sendMessage(Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + " is currently " + ChatColor.GREEN + "active" + Color.SECONDARY_COLOR + " and the player has " + (!dataTracker.hasCompleted(dailyChallenge.getCompletionRequirement()) ? ChatColor.RED + "not" : ChatColor.GREEN + "already") + Color.SECONDARY_COLOR + " finished the challenge.");
+                                player.sendMessage(Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + " is currently " + ChatColor.GREEN + "active" + Color.SECONDARY_COLOR + " and the player has " + (!dataTracker.canAchieve(dailyChallenge.getCompletionRequirement()) ? ChatColor.RED + "not" : ChatColor.GREEN + "already") + Color.SECONDARY_COLOR + " finished the challenge.");
                             } else {
                                 player.sendMessage(ChatColor.RED + "Error: No challenge matching " + ChatColor.YELLOW + StringUtil.buildMessage(args, 3) + ChatColor.RED + " found.");
                             }
