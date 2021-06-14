@@ -123,7 +123,7 @@ public class ChallengePlayer {
                 .forEach(dailyChallenge -> {
                     final DataTracker dataTracker = this.getTrackerByClass(dailyChallenge.getTrackerType());
 
-                    if (dataTracker != null && dataTracker.canAchieve(dailyChallenge.getCompletionRequirement())&& !dataTracker.hasCompleted(dailyChallenge.getCompletionRequirement())) {
+                    if (dataTracker != null && dataTracker.canAchieve(dailyChallenge.getCompletionRequirement()) && !dataTracker.hasCompleted(dailyChallenge.getCompletionRequirement())) {
                         final Player player = Bukkit.getPlayer(this.uuid);
 
                         if (player != null) {
