@@ -23,10 +23,6 @@ import java.util.logging.Logger;
 @Getter
 public final class BarChallengesPlugin extends CommonsPlugin {
 
-    public final static Gson GSON = new GsonBuilder()
-            .disableHtmlEscaping()
-            .create();
-
     @Getter
     private static BarChallengesPlugin instance;
 
