@@ -40,38 +40,40 @@ public class DataTrackerCommand extends BaseCommand {
 
         if (args.length <= 0) {
             player.sendMessage(this.getUsageMessage("status", "<player> <tracker> <challenge>"));
+            return false;
         }
 
-        if (args.length > 0) {
-            if (args[0].toLowerCase().equals("status")) {
-                if (args.length < 4) {
-                    player.sendMessage(this.getUsageMessage("status", "<player> <tracker> <challenge>"));
-                }
-                if (args.length >= 4) {
-                    final Player target = Bukkit.getPlayer(args[1]);
+        if (!args[0].toLowerCase().equals("status")) {
+            player.sendMessage(this.getUsageMessage("status", "<player> <tracker> <challenge>"));
+            return false;
+        }
 
-                    if (target != null) {
-                        final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(target);
-                        final DataTracker dataTracker = challengePlayer.getTrackerByName(args[2]);
+        if (args.length < 4) {
+            player.sendMessage(this.getUsageMessage("status", "<player> <tracker> <challenge>"));
+        }
+        if (args.length >= 4) {
+            final Player target = Bukkit.getPlayer(args[1]);
 
-                        if (dataTracker != null) {
-                            final DailyChallenge<?> dailyChallenge = BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges()
-                                    .stream().filter(dailyChallenge1 -> dailyChallenge1.getName().equalsIgnoreCase(StringUtil.buildMessage(args, 3))).findFirst().orElse(null);
+            if (target == null) {
+                player.sendMessage(ChatColor.RED + "Error: No player matching " + ChatColor.YELLOW + args[1] + ChatColor.RED + " is online.");
+                return false;
+            }
 
-                            if (dailyChallenge != null) {
-                                player.sendMessage(Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + " is currently " + ChatColor.GREEN + "active" + Color.SECONDARY_COLOR + " and the player has " + (!dataTracker.canAchieve(dailyChallenge.getCompletionRequirement()) ? ChatColor.RED + "not" : ChatColor.GREEN + "already") + Color.SECONDARY_COLOR + " finished the challenge.");
-                            } else {
-                                player.sendMessage(ChatColor.RED + "Error: No challenge matching " + ChatColor.YELLOW + StringUtil.buildMessage(args, 3) + ChatColor.RED + " found.");
-                            }
-                        } else {
-                            player.sendMessage(ChatColor.RED + "Error: No tracker matching " + ChatColor.YELLOW + args[2] + ChatColor.RED + " found.");
-                        }
-                    } else {
-                        player.sendMessage(ChatColor.RED + "Error: No player matching " + ChatColor.YELLOW + args[1] + ChatColor.RED + " found.");
-                    }
-                }
+            final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(target);
+            final DataTracker dataTracker = challengePlayer.getTrackerByName(args[2]);
+
+            if (dataTracker == null) {
+                player.sendMessage(ChatColor.RED + "Error: No tracker matching " + ChatColor.YELLOW + args[2] + ChatColor.RED + " exists.");
+                return false;
+            }
+
+            final DailyChallenge<?> dailyChallenge = BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges()
+                    .stream().filter(dailyChallenge1 -> dailyChallenge1.getName().equalsIgnoreCase(StringUtil.buildMessage(args, 3))).findFirst().orElse(null);
+
+            if (dailyChallenge != null) {
+                player.sendMessage(Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + " is currently " + ChatColor.GREEN + "active" + Color.SECONDARY_COLOR + " and the player has " + (!dataTracker.canAchieve(dailyChallenge.getCompletionRequirement()) ? ChatColor.RED + "not" : ChatColor.GREEN + "already") + Color.SECONDARY_COLOR + " finished the challenge.");
             } else {
-                player.sendMessage(this.getUsageMessage("status", "<player> <tracker> <challenge>"));
+                player.sendMessage(ChatColor.RED + "Error: No challenge matching " + ChatColor.YELLOW + StringUtil.buildMessage(args, 3) + ChatColor.RED + " found.");
             }
         }
 

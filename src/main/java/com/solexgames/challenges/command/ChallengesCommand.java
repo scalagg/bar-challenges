@@ -26,12 +26,11 @@ public class ChallengesCommand extends BaseCommand {
     @Override
     public boolean command(CommandSender commandSender, String s, String[] args) {
         if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage(this.ONLY_PLAYERS);
+            commandSender.sendMessage(ONLY_PLAYERS);
             return false;
         }
 
         final Player player = (Player) commandSender;
-
         new ChallengeViewMenu().openMenu(player);
 
         return false;
