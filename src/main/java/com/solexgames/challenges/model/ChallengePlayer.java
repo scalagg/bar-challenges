@@ -5,22 +5,21 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import com.solexgames.challenges.BarChallengesConstants;
 import com.solexgames.challenges.BarChallengesPlugin;
+import com.solexgames.challenges.challenge.DailyChallenge;
 import com.solexgames.challenges.tracker.DataTracker;
 import com.solexgames.challenges.util.DateValidationUtil;
 import com.solexgames.core.CorePlugin;
 import com.solexgames.core.util.Color;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.SneakyThrows;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -32,10 +31,10 @@ import java.util.concurrent.CompletableFuture;
  */
 
 @Getter
-@Setter
 @SuppressWarnings("all")
 public class ChallengePlayer {
 
+    private List<String> completedChallenges = new ArrayList<>();
     private List<DataTracker> dataTrackers = new ArrayList<>();
 
     private final UUID uuid;
@@ -76,6 +75,8 @@ public class ChallengePlayer {
         });
 
         document.put("dataTrackers", dataTrackers);
+        document.put("completedChallenges", this.completedChallenges);
+
         document.put("lastLogin", System.currentTimeMillis());
 
         return document;
@@ -93,6 +94,7 @@ public class ChallengePlayer {
 
                     dataTrackers.forEach(dataTracker -> {
                         final JsonObject jsonObject = new JsonParser().parse(dataTracker).getAsJsonObject();
+
                         final String className = jsonObject.get("className").getAsString();
                         final String classData = jsonObject.get("classData").getAsString();
 
@@ -102,6 +104,7 @@ public class ChallengePlayer {
                     });
 
                     this.lastLogin = document.getLong("lastLogin");
+                    this.completedChallenges = document.getList("completedChallenges", String.class);
 
                     if (this.dataTrackers.isEmpty()) {
                         this.resetAndAddDefaultDataTrackers();
@@ -123,27 +126,31 @@ public class ChallengePlayer {
                 .forEach(dailyChallenge -> {
                     final DataTracker dataTracker = this.getTrackerByClass(dailyChallenge.getTrackerType());
 
-                    if (dataTracker != null && dataTracker.canAchieve(dailyChallenge.getCompletionRequirement()) && !dataTracker.hasCompleted(dailyChallenge.getCompletionRequirement())) {
+                    if (dataTracker != null && dataTracker.canAchieve(dailyChallenge.getCompletionRequirement()) && !this.hasCompleted(dailyChallenge)) {
                         final Player player = Bukkit.getPlayer(this.uuid);
 
                         if (player != null) {
                             player.sendMessage(new String[]{
-                                    "",
-                                    Color.SECONDARY_COLOR + "You've completed today's daily challenge of getting " + Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + "!",
-                                    ChatColor.GRAY + ChatColor.ITALIC.toString() + "You'll receive your rewards shortly!",
-                                    ""
+                                    BarChallengesConstants.CHALLENGE_PREFIX + Color.SECONDARY_COLOR + "You've completed the " + Color.MAIN_COLOR + dailyChallenge.getName() + Color.SECONDARY_COLOR + " challenge!",
+                                    BarChallengesConstants.CHALLENGE_PREFIX + ChatColor.GRAY + "Rewards for this challenge completion will be given shortly.",
                             });
 
-                            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player.getLocation());
+                            this.completedChallenges.add(dailyChallenge.getName());
 
+                            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(player.getLocation());
                             dailyChallenge.getRewards().forEach(challengeReward -> challengeReward.giveTo(player));
                         }
                     }
                 });
     }
 
+    public boolean hasCompleted(DailyChallenge<?> dailyChallenge) {
+        return this.completedChallenges.contains(dailyChallenge.getName());
+    }
+
     public void resetAndAddDefaultDataTrackers() {
         this.dataTrackers.clear();
+        this.completedChallenges.clear();
 
         BarChallengesPlugin.getInstance().getDataTrackerHandler().getDataTrackerClasses()
                 .forEach(this::registerTrackerByClass);
@@ -162,13 +169,9 @@ public class ChallengePlayer {
                 });
     }
 
+    @SneakyThrows
     public void registerTrackerByClass(Class<?> clazz) {
-        try {
-            this.dataTrackers.add((DataTracker) clazz.newInstance());
-        } catch (Exception exception) {
-            // it should never throw an exception
-            exception.printStackTrace();
-        }
+        this.dataTrackers.add((DataTracker) clazz.newInstance());
     }
 
     public <T> T getTrackerByClass(Class<? extends DataTracker> clazz) {

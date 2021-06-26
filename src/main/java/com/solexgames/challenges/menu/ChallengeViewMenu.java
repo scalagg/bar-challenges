@@ -61,7 +61,7 @@ public class ChallengeViewMenu extends PaginatedMenu {
             final List<String> stringList = new ArrayList<>(Arrays.asList(this.dailyChallenge.getDescription()));
 
             final DataTracker dataTracker = this.challengePlayer.getTrackerByClass(this.dailyChallenge.getTrackerType());
-            final boolean hasCompleted = dataTracker.canAchieve(this.dailyChallenge.getCompletionRequirement()) && dataTracker.hasCompleted(this.dailyChallenge.getCompletionRequirement());
+            final boolean hasCompleted = dataTracker.hasCompleted(this.dailyChallenge.getCompletionRequirement());
 
             stringList.add(" ");
             stringList.add(Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Goal:");
