@@ -26,11 +26,6 @@ public class KillsDataTracker implements DataTracker {
 
     @Override
     public boolean canAchieve(Object data) {
-        return data instanceof Integer && this.currentKills == (Integer) data;
-    }
-
-    @Override
-    public boolean hasCompleted(Object data) {
         return data instanceof Integer && this.currentKills >= (Integer) data;
     }
 

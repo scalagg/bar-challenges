@@ -48,6 +48,16 @@ public final class BarChallengesPlugin extends CommonsPlugin {
 
         this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
+        this.setupDefaultChallenges();
+
+        new ChallengesCommand();
+        new DataTrackerCommand();
+
+        new DailyCheckTask()
+                .runTaskTimerAsynchronously(this, 0L, TimeUnit.MINUTES.toMillis(1L));
+    }
+
+    private void setupDefaultChallenges() {
         BukkitUtil.getClassesInPackage(this, "com.solexgames.challenges.listener.tracker.impl")
                 .forEach(aClass -> {
                     try {
@@ -60,11 +70,5 @@ public final class BarChallengesPlugin extends CommonsPlugin {
                         Logger.getGlobal().info("[Challenges] Couldn't register the listener " + aClass.getSimpleName() + ".");
                     }
                 });
-
-        new ChallengesCommand();
-        new DataTrackerCommand();
-
-        new DailyCheckTask()
-                .runTaskTimerAsynchronously(this, 0L, TimeUnit.MINUTES.toMillis(5L));
     }
 }

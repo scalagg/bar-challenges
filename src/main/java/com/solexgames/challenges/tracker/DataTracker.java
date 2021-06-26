@@ -11,8 +11,6 @@ public interface DataTracker {
 
     boolean canAchieve(Object data);
 
-    boolean hasCompleted(Object data);
-
     String getStatusMessage(Object data);
 
 }

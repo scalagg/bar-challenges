@@ -106,6 +106,10 @@ public class ChallengePlayer {
                     this.lastLogin = document.getLong("lastLogin");
                     this.completedChallenges = document.getList("completedChallenges", String.class);
 
+                    if (this.completedChallenges == null) {
+                        this.completedChallenges = new ArrayList<>();
+                    }
+
                     if (this.dataTrackers.isEmpty()) {
                         this.resetAndAddDefaultDataTrackers();
                     }
