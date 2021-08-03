@@ -1,12 +1,15 @@
 package com.solexgames.challenges.task;
 
+import com.mongodb.Block;
 import com.solexgames.challenges.BarChallengesPlugin;
 import com.solexgames.challenges.model.ChallengePlayer;
 import com.solexgames.challenges.util.DateValidationUtil;
+import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
@@ -27,6 +30,16 @@ public class DailyCheckTask extends BukkitRunnable {
             Bukkit.getOnlinePlayers().stream()
                     .map(BarChallengesPlugin.getInstance().getPlayerHandler()::getByPlayer)
                     .forEach(ChallengePlayer::resetAndAddDefaultDataTrackers);
+
+            BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find().forEach((Block<? super Document>) document -> {
+                final ChallengePlayer challengePlayer = new ChallengePlayer(UUID.fromString(document.getString("uuid")), document.getString("name"));
+
+                Bukkit.getScheduler().runTaskLaterAsynchronously(BarChallengesPlugin.getInstance(), () -> {
+                    challengePlayer.savePlayerData(false);
+                }, 10L);
+            });
+
+            Bukkit.getScheduler().runTaskLater(BarChallengesPlugin.getInstance(), System::gc, 40L);
 
             Logger.getGlobal().info("[Challenges] All online players' data trackers have been reset.");
         }

@@ -12,6 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 public class BarChallengesConstants {
 
-    public static final String CHALLENGE_PREFIX = Color.MAIN_COLOR + ChatColor.BOLD.toString() + "Challenges " + ChatColor.GRAY + ChatColor.BOLD.toString() + "»" + " ";
+    public static final String CHALLENGE_PREFIX = Color.MAIN_COLOR + ChatColor.BOLD + "Challenges " + ChatColor.GRAY + ChatColor.BOLD.toString() + "»" + " ";
 
 }
