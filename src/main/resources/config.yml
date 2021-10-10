@@ -1,8 +1,8 @@
 challenges:
   impl:
     registration:
-      - "com.solexgames.challenges.challenge.impl"
+      - "gg.scala.challenges.challenge.impl"
 data-tracker:
   impl:
     registration:
-      - "com.solexgames.challenges.tracker.impl"
+      - "gg.scala.challenges.tracker.impl"

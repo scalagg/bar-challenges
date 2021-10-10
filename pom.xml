@@ -86,7 +86,7 @@
         </resources>
 
         <!--suppress UnresolvedMavenProperty -->
-        <finalName>pvpbar-challenges-${git.commit.id.abbrev}</finalName>
+        <finalName>pvpbar-challenges</finalName>
     </build>
 
     <repositories>
@@ -102,31 +102,54 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>LATEST</version>
-            <scope>provided</scope>
+            <groupId>net.evilblock</groupId>
+            <artifactId>cubed</artifactId>
+            <version>1.2</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/cubed-bukkit-1.2.jar</systemPath>
         </dependency>
 
         <dependency>
-            <groupId>com.solexgames.lib</groupId>
-            <artifactId>commonlibs-bukkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>gg.scala</groupId>
+            <artifactId>lemon</artifactId>
+            <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/commonslibs-bukkit.jar</systemPath>
+            <systemPath>${basedir}/lib/Lemon.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>com.solexgames.core</groupId>
-            <artifactId>core-bukkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>gg.scala</groupId>
+            <artifactId>cookie</artifactId>
+            <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/Scandium.jar</systemPath>
+            <systemPath>${basedir}/lib/Cookie.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>gg.scala</groupId>
+            <artifactId>peach</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Peach.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>me.lucko</groupId>
+            <artifactId>helper</artifactId>
+            <version>5.6.7</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/helper.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
