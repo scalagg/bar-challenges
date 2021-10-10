@@ -9,9 +9,12 @@ import gg.scala.challenges.handler.MongoHandler;
 import gg.scala.challenges.listener.PlayerListener;
 import gg.scala.challenges.model.ChallengePlayer;
 import gg.scala.challenges.task.DailyCheckTask;
+import gg.scala.lemon.Lemon;
 import lombok.Getter;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
+import net.evilblock.cubed.command.manager.CubedCommandManager;
 import net.evilblock.cubed.util.ClassUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 
 import java.util.concurrent.TimeUnit;
@@ -46,8 +49,13 @@ public final class BarChallengesPlugin extends ExtendedJavaPlugin {
 
         this.setupDefaultChallenges();
 
-        new ChallengesCommand();
-        new DataTrackerCommand();
+        final CubedCommandManager paperCommandManager = new CubedCommandManager(
+                this,
+                ChatColor.valueOf(Lemon.instance.lemonWebData.getPrimary()),
+                ChatColor.valueOf(Lemon.instance.lemonWebData.getSecondary())
+        );
+
+        paperCommandManager.registerCommand(new ChallengesCommand());
 
         new DailyCheckTask()
                 .runTaskTimerAsynchronously(this, 0L, TimeUnit.MINUTES.toMillis(1L));
