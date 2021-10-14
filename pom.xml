@@ -85,7 +85,6 @@
             </resource>
         </resources>
 
-        <!--suppress UnresolvedMavenProperty -->
         <finalName>pvpbar-challenges</finalName>
     </build>
 

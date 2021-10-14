@@ -23,11 +23,6 @@ import java.util.*;
  */
 public class ChallengeViewMenu extends PaginatedMenu {
 
-    @Override
-    public int size(@NotNull Map<Integer, ? extends Button> buttons) {
-        return 9;
-    }
-
     @NotNull
     @Override
     public String getPrePaginatedTitle(@NotNull Player player) {
@@ -40,8 +35,9 @@ public class ChallengeViewMenu extends PaginatedMenu {
         final Map<Integer, Button> buttonMap = new HashMap<>();
         final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(player);
 
+        int current = -1;
         for (DailyChallenge<?> dailyChallenge : BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges()) {
-            buttonMap.put(buttonMap.size(), new ChallengeButton(dailyChallenge, challengePlayer));
+            buttonMap.put(current++, new ChallengeButton(dailyChallenge, challengePlayer));
         }
 
         return buttonMap;
@@ -72,7 +68,7 @@ public class ChallengeViewMenu extends PaginatedMenu {
                     .forEach(stringList::add);
 
             stringList.add(" ");
-            stringList.add(hasCompleted ? ChatColor.GREEN + "[You've finished this challenge today]" : ChatColor.YELLOW + "[You're working on this challenge]");
+            stringList.add(hasCompleted ? ChatColor.GREEN + "You've completed this challenge." : ChatColor.YELLOW + "You're working on this challenge.");
 
             return new ItemBuilder(Material.INK_SACK)
                     .name(CC.SEC + this.dailyChallenge.getName())

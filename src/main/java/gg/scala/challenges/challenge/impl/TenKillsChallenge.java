@@ -5,6 +5,7 @@ import gg.scala.challenges.reward.ChallengeReward;
 import gg.scala.challenges.reward.impl.ExperienceReward;
 import gg.scala.challenges.tracker.DataTracker;
 import gg.scala.challenges.tracker.impl.KillsDataTracker;
+import lombok.var;
 import org.bukkit.ChatColor;
 
 import java.util.Collections;
