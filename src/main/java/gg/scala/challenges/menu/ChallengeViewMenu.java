@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -38,6 +39,33 @@ public class ChallengeViewMenu extends PaginatedMenu {
         return "Challenges » Daily";
     }
 
+    @Nullable
+    @Override
+    public Map<Integer, Button> getGlobalButtons(@NotNull Player player) {
+        final Map<Integer, Button> buttonMap = new HashMap<>();
+        final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(player);
+
+        final int amountCompleted = (int) BarChallengesPlugin.getInstance().getChallengeHandler()
+                .getRegisteredChallenges().stream().filter(challengePlayer::hasCompleted).count();
+
+        final int total = BarChallengesPlugin.getInstance().getChallengeHandler()
+                .getRegisteredChallenges().size();
+
+        buttonMap.put(4, new ItemBuilder(Material.BOOK)
+                .name(CC.B_GOLD + "Daily Challenges")
+                .addToLore(
+                        CC.GRAY + "Completed:",
+                        CC.WHITE + amountCompleted + " / " + total,
+                        "",
+                        CC.GRAY + "You have " + CC.YELLOW + (total - amountCompleted) + CC.GRAY + "",
+                        CC.GRAY + "challenges left to complete."
+                )
+                .toButton()
+        );
+
+        return buttonMap;
+    }
+
     @NotNull
     @Override
     public Map<Integer, Button> getAllPagesButtons(@NotNull Player player) {
@@ -46,8 +74,7 @@ public class ChallengeViewMenu extends PaginatedMenu {
 
         int current = 0;
         for (DailyChallenge<?> dailyChallenge : BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges()) {
-            if (current == 8 || current == 17 || current == 26)
-            {
+            if (current == 8 || current == 17 || current == 26) {
                 current = current + 2;
             } else {
                 current++;
