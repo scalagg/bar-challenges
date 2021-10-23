@@ -23,6 +23,15 @@ import java.util.*;
  */
 public class ChallengeViewMenu extends PaginatedMenu {
 
+    {
+        setPlaceholdBorders(true);
+    }
+
+    @Override
+    public int size(@NotNull Map<Integer, ? extends Button> buttons) {
+        return 27;
+    }
+
     @NotNull
     @Override
     public String getPrePaginatedTitle(@NotNull Player player) {
@@ -35,9 +44,16 @@ public class ChallengeViewMenu extends PaginatedMenu {
         final Map<Integer, Button> buttonMap = new HashMap<>();
         final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(player);
 
-        int current = -1;
+        int current = 0;
         for (DailyChallenge<?> dailyChallenge : BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges()) {
-            buttonMap.put(current++, new ChallengeButton(dailyChallenge, challengePlayer));
+            if (current == 8 || current == 17 || current == 26)
+            {
+                current = current + 2;
+            } else {
+                current++;
+            }
+
+            buttonMap.put(current, new ChallengeButton(dailyChallenge, challengePlayer));
         }
 
         return buttonMap;
@@ -58,20 +74,20 @@ public class ChallengeViewMenu extends PaginatedMenu {
             final boolean hasCompleted = this.challengePlayer.hasCompleted(this.dailyChallenge);
 
             stringList.add(" ");
-            stringList.add(CC.PRI + ChatColor.BOLD.toString() + "Goal:");
-            stringList.add(ChatColor.GRAY + " - " + this.dailyChallenge.getGoal() + " " + dataTracker.getStatusMessage(this.dailyChallenge.getCompletionRequirement()));
+            stringList.add(CC.B_PRI + "Goal:");
+            stringList.add(ChatColor.WHITE + " - " + this.dailyChallenge.getGoal() + " " + CC.GRAY + dataTracker.getStatusMessage(this.dailyChallenge.getCompletionRequirement()));
             stringList.add(" ");
-            stringList.add(CC.PRI + ChatColor.BOLD.toString() + "Rewards:");
+            stringList.add(CC.B_PRI + "Rewards:");
 
             this.dailyChallenge.getRewards().stream()
-                    .map(challengeReward -> ChatColor.GRAY + " - " + challengeReward.getDescription())
+                    .map(challengeReward -> ChatColor.WHITE + " - " + challengeReward.getDescription())
                     .forEach(stringList::add);
 
             stringList.add(" ");
             stringList.add(hasCompleted ? ChatColor.GREEN + "You've completed this challenge." : ChatColor.YELLOW + "You're working on this challenge.");
 
             return new ItemBuilder(Material.INK_SACK)
-                    .name(CC.SEC + this.dailyChallenge.getName())
+                    .name(CC.B_GOLD + this.dailyChallenge.getName())
                     .data((short) (hasCompleted ? 10 : 8))
                     .setLore(stringList).build();
         }

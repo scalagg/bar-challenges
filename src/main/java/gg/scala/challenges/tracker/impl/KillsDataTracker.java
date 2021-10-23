@@ -4,7 +4,6 @@ import gg.scala.challenges.tracker.DataTracker;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.evilblock.cubed.util.CC;
 import org.bukkit.ChatColor;
 
 /**
@@ -31,6 +30,6 @@ public class KillsDataTracker implements DataTracker {
 
     @Override
     public String getStatusMessage(Object data) {
-        return data instanceof Integer ? ChatColor.GRAY + "(" + CC.PRI + this.currentKills + "/" + data + ChatColor.GRAY + ")" : "";
+        return data instanceof Integer ? ChatColor.GRAY + "(" + this.currentKills + "/" + data + ")" : "";
     }
 }
