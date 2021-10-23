@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import net.evilblock.cubed.util.ClassUtils;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 /**
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
 @NoArgsConstructor
 public class ChallengeHandler {
 
-    private final Set<DailyChallenge<?>> registeredChallenges = new HashSet<>();
+    private final LinkedList<DailyChallenge<?>> registeredChallenges = new LinkedList<>();
 
     public void registerDefaultChallenges() {
         BarChallengesPlugin.getInstance().getConfig().getStringList("challenges.impl.registration")

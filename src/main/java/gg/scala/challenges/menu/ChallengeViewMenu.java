@@ -45,16 +45,16 @@ public class ChallengeViewMenu extends PaginatedMenu {
         final Map<Integer, Button> buttonMap = new HashMap<>();
         final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(player);
 
-        int current = 0;
-        for (DailyChallenge<?> dailyChallenge : BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges()) {
-            if (current == 8 || current == 17 || current == 26) {
-                current = current + 2;
+        final int[] current = {0};
+        BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges().forEach(dailyChallenge -> {
+            if (current[0] == 8 || current[0] == 17 || current[0] == 26) {
+                current[0] = current[0] + 2;
             } else {
-                current++;
+                current[0]++;
             }
 
-            buttonMap.put(current, new ChallengeButton(dailyChallenge, challengePlayer));
-        }
+            buttonMap.put(current[0], new ChallengeButton(dailyChallenge, challengePlayer));
+        });
 
         final int amountCompleted = (int) BarChallengesPlugin.getInstance().getChallengeHandler()
                 .getRegisteredChallenges().stream().filter(challengePlayer::hasCompleted).count();
