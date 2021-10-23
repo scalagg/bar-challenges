@@ -39,33 +39,6 @@ public class ChallengeViewMenu extends PaginatedMenu {
         return "Challenges » Daily";
     }
 
-    @Nullable
-    @Override
-    public Map<Integer, Button> getGlobalButtons(@NotNull Player player) {
-        final Map<Integer, Button> buttonMap = new HashMap<>();
-        final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(player);
-
-        final int amountCompleted = (int) BarChallengesPlugin.getInstance().getChallengeHandler()
-                .getRegisteredChallenges().stream().filter(challengePlayer::hasCompleted).count();
-
-        final int total = BarChallengesPlugin.getInstance().getChallengeHandler()
-                .getRegisteredChallenges().size();
-
-        buttonMap.put(4, new ItemBuilder(Material.BOOK)
-                .name(CC.B_GOLD + "Daily Challenges")
-                .addToLore(
-                        CC.GRAY + "Completed:",
-                        CC.WHITE + amountCompleted + " / " + total,
-                        "",
-                        CC.GRAY + "You have " + CC.YELLOW + (total - amountCompleted) + CC.GRAY + "",
-                        CC.GRAY + "challenges left to complete."
-                )
-                .toButton()
-        );
-
-        return buttonMap;
-    }
-
     @NotNull
     @Override
     public Map<Integer, Button> getAllPagesButtons(@NotNull Player player) {
@@ -82,6 +55,17 @@ public class ChallengeViewMenu extends PaginatedMenu {
 
             buttonMap.put(current, new ChallengeButton(dailyChallenge, challengePlayer));
         }
+
+        final int amountCompleted = (int) BarChallengesPlugin.getInstance().getChallengeHandler()
+                .getRegisteredChallenges().stream().filter(challengePlayer::hasCompleted).count();
+
+        final int total = BarChallengesPlugin.getInstance().getChallengeHandler()
+                .getRegisteredChallenges().size();
+
+        buttonMap.put(13, new ItemBuilder(Material.BOOK)
+                .name(CC.GRAY + "Completed: " + CC.WHITE + (amountCompleted + " / " + total))
+                .toButton()
+        );
 
         return buttonMap;
     }
