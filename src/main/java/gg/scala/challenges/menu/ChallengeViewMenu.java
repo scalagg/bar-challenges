@@ -14,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -55,17 +54,6 @@ public class ChallengeViewMenu extends PaginatedMenu {
 
             buttonMap.put(current[0], new ChallengeButton(dailyChallenge, challengePlayer));
         });
-
-        final int amountCompleted = (int) BarChallengesPlugin.getInstance().getChallengeHandler()
-                .getRegisteredChallenges().stream().filter(challengePlayer::hasCompleted).count();
-
-        final int total = BarChallengesPlugin.getInstance().getChallengeHandler()
-                .getRegisteredChallenges().size();
-
-        buttonMap.put(13, new ItemBuilder(Material.BOOK)
-                .name(CC.GRAY + "Completed: " + CC.WHITE + (amountCompleted + " / " + total))
-                .toButton()
-        );
 
         return buttonMap;
     }

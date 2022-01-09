@@ -1,10 +1,10 @@
 package gg.scala.challenges.handler;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import gg.scala.lemon.Lemon;
+
+import gg.scala.store.ScalaDataStoreShared;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -24,13 +24,10 @@ public class MongoHandler {
     private MongoCollection<Document> playerCollection;
 
     public MongoHandler() {
-        this.client = new MongoClient(
-                new MongoClientURI(
-                        Lemon.getInstance().getMongoConfig().getUri()
-                )
-        );
-        this.database = this.client.getDatabase("SolexGames");
+        this.client = ScalaDataStoreShared.getINSTANCE()
+                .getNewMongoConnection().getConnection();
 
-        this.playerCollection = this.database.getCollection("challenge_players");
+        this.database = this.client.getDatabase("Scala");
+        this.playerCollection = this.database.getCollection("ChallengePlayer");
     }
 }
