@@ -73,10 +73,10 @@ public class ChallengeViewMenu extends PaginatedMenu {
             final boolean hasCompleted = this.challengePlayer.hasCompleted(this.dailyChallenge);
 
             stringList.add(" ");
-            stringList.add(CC.B_PRI + "Goal:");
+            stringList.add(CC.PRI + "Goal:");
             stringList.add(ChatColor.WHITE + " - " + this.dailyChallenge.getGoal() + " " + CC.GRAY + dataTracker.getStatusMessage(this.dailyChallenge.getCompletionRequirement()));
             stringList.add(" ");
-            stringList.add(CC.B_PRI + "Rewards:");
+            stringList.add(CC.PRI + "Rewards:");
 
             this.dailyChallenge.getRewards().stream()
                     .map(challengeReward -> ChatColor.WHITE + " - " + challengeReward.getDescription())
@@ -86,7 +86,7 @@ public class ChallengeViewMenu extends PaginatedMenu {
             stringList.add(hasCompleted ? ChatColor.GREEN + "You've completed this challenge." : ChatColor.YELLOW + "You're working on this challenge.");
 
             return new ItemBuilder(Material.INK_SACK)
-                    .name(CC.B_GOLD + this.dailyChallenge.getName())
+                    .name(CC.D_AQUA + this.dailyChallenge.getName())
                     .data((short) (hasCompleted ? 10 : 8))
                     .setLore(stringList).build();
         }

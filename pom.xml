@@ -148,6 +148,13 @@
         </dependency>
 
         <dependency>
+            <groupId>gg.scala</groupId>
+            <artifactId>grape</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Grape.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>com.github.scalagg.scala-store</groupId>
             <artifactId>shared</artifactId>
             <version>1e41208707</version>

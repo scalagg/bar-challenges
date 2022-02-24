@@ -25,7 +25,7 @@ public class MongoHandler {
 
     public MongoHandler() {
         this.client = ScalaDataStoreShared.getINSTANCE()
-                .getNewMongoConnection().getConnection();
+                .getNewMongoConnection().createNewConnection();
 
         this.database = this.client.getDatabase("Scala");
         this.playerCollection = this.database.getCollection("ChallengePlayer");

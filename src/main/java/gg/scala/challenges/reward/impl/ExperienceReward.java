@@ -2,6 +2,8 @@ package gg.scala.challenges.reward.impl;
 
 import gg.scala.challenges.reward.ChallengeReward;
 
+import gg.scala.grape.GrapeSpigotPlugin;
+import gg.scala.grape.player.impl.PersistentGrapePlayer;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
 
@@ -17,18 +19,21 @@ public class ExperienceReward implements ChallengeReward {
 
     @Override
     public String getName() {
-        return this.amount + " Experience";
+        return this.amount + " Coins";
     }
 
     @Override
     public String getDescription() {
-        return "Receive " + this.amount + " experience";
+        return "Receive " + this.amount + " coins";
     }
 
     @Override
     public void giveTo(Player player) {
-//        final PotPlayer potPlayer = CorePlugin.getInstance().getPlayerManager().getPlayer(player);
-//
-//        potPlayer.setExperience(potPlayer.getExperience() + this.amount);
+        final PersistentGrapePlayer grapePlayer = GrapeSpigotPlugin
+                .getInstance().getPlayerHandler().getByPlayer(player);
+
+        grapePlayer.setCoins(
+                grapePlayer.getCoins() + this.amount
+        );
     }
 }
