@@ -4,6 +4,8 @@ import com.mongodb.Block;
 import gg.scala.challenges.BarChallengesPlugin;
 import gg.scala.challenges.model.ChallengePlayer;
 import gg.scala.challenges.util.DateValidationUtil;
+import gg.scala.commons.annotations.runnables.Repeating;
+import me.lucko.helper.promise.ThreadContext;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,7 +18,7 @@ import java.util.logging.Logger;
  * @author GrowlyX
  * @since 6/12/2021
  */
-
+@Repeating(value = 20L * 60L, context = ThreadContext.ASYNC)
 public class DailyCheckTask extends BukkitRunnable {
 
     private Date previousDate;
@@ -39,7 +41,6 @@ public class DailyCheckTask extends BukkitRunnable {
                 }, 10L);
             });
 
-            Bukkit.getScheduler().runTaskLater(BarChallengesPlugin.getInstance(), System::gc, 40L);
             Logger.getGlobal().info("[Challenges] All online players' data trackers have been reset.");
         }
 

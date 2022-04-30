@@ -1,19 +1,19 @@
 package gg.scala.challenges.command;
 
 import gg.scala.challenges.menu.ChallengeViewMenu;
-import net.evilblock.cubed.acf.BaseCommand;
+import gg.scala.commons.annotations.commands.AutoRegister;
+import gg.scala.commons.command.ScalaCommand;
 import net.evilblock.cubed.acf.annotation.CommandAlias;
-import net.evilblock.cubed.acf.annotation.Default;
 import org.bukkit.entity.Player;
 
 /**
  * @author GrowlyX
  * @since 6/12/2021
  */
-@CommandAlias("challenge|challenges")
-public class ChallengesCommand extends BaseCommand {
+@AutoRegister
+public class ChallengesCommand extends ScalaCommand {
 
-    @Default
+    @CommandAlias("challenge|challenges")
     public void onDefault(Player player) {
         new ChallengeViewMenu().openMenu(player);
     }

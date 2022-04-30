@@ -2,6 +2,7 @@ package gg.scala.challenges.listener;
 
 import gg.scala.challenges.BarChallengesPlugin;
 import gg.scala.challenges.model.ChallengePlayer;
+import gg.scala.commons.annotations.Listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -11,7 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @author GrowlyX
  * @since 6/12/2021
  */
-
+@Listeners
 public class PlayerListener implements Listener {
 
     @EventHandler

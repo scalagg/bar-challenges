@@ -1,27 +1,21 @@
 package gg.scala.challenges;
 
-import gg.scala.challenges.command.ChallengesCommand;
 import gg.scala.challenges.commons.PlayerCache;
 import gg.scala.challenges.commons.impl.BasicPlayerCache;
 import gg.scala.challenges.handler.ChallengeHandler;
 import gg.scala.challenges.handler.DataTrackerHandler;
 import gg.scala.challenges.handler.MongoHandler;
-import gg.scala.challenges.listener.PlayerListener;
 import gg.scala.challenges.model.ChallengePlayer;
-import gg.scala.challenges.task.DailyCheckTask;
-import gg.scala.lemon.Lemon;
+import gg.scala.commons.ExtendedScalaPlugin;
+import gg.scala.commons.annotations.container.ContainerEnable;
 import lombok.Getter;
-import me.lucko.helper.plugin.ExtendedJavaPlugin;
-import net.evilblock.cubed.command.manager.CubedCommandManager;
 import net.evilblock.cubed.util.ClassUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 @Getter
-public final class BarChallengesPlugin extends ExtendedJavaPlugin {
+public final class BarChallengesPlugin extends ExtendedScalaPlugin {
 
     @Getter
     private static BarChallengesPlugin instance;
@@ -32,8 +26,8 @@ public final class BarChallengesPlugin extends ExtendedJavaPlugin {
 
     private final PlayerCache<ChallengePlayer> playerHandler = new BasicPlayerCache<>();
 
-    @Override
-    public void enable() {
+    @ContainerEnable
+    public void containerEnable() {
         instance = this;
 
         this.saveDefaultConfig();
@@ -45,20 +39,7 @@ public final class BarChallengesPlugin extends ExtendedJavaPlugin {
         this.dataTrackerHandler = new DataTrackerHandler();
         this.dataTrackerHandler.setupDefaultDataTrackerClasses();
 
-        this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-
         this.setupDefaultChallenges();
-
-        final CubedCommandManager paperCommandManager = new CubedCommandManager(
-                this,
-                ChatColor.valueOf(Lemon.instance.lemonWebData.getPrimary()),
-                ChatColor.valueOf(Lemon.instance.lemonWebData.getSecondary())
-        );
-
-        paperCommandManager.registerCommand(new ChallengesCommand());
-
-        new DailyCheckTask()
-                .runTaskTimerAsynchronously(this, 0L, TimeUnit.MINUTES.toMillis(1L));
     }
 
     private void setupDefaultChallenges() {
