@@ -5,4 +5,4 @@ main: gg.scala.challenges.BarChallengesPlugin
 author: Scala
 website: https://scala.gg
 
-depend: [Lemon, Peach, helper, Cubed]
+depend: [Lemon, Peach, helper, scala-commons]
