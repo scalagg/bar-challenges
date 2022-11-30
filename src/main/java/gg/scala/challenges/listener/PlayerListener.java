@@ -17,7 +17,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
-        BarChallengesPlugin.getInstance().getPlayerHandler().insert(event.getUniqueId(), new ChallengePlayer(event.getUniqueId(), event.getName()));
+        BarChallengesPlugin.getInstance().getPlayerHandler().insert(
+            event.getUniqueId(), new ChallengePlayer(event.getUniqueId(), event.getName())
+        );
     }
 
     @EventHandler

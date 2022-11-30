@@ -1,9 +1,9 @@
 package gg.scala.challenges.command;
 
 import gg.scala.challenges.menu.ChallengeViewMenu;
+import gg.scala.commons.acf.annotation.CommandAlias;
 import gg.scala.commons.annotations.commands.AutoRegister;
 import gg.scala.commons.command.ScalaCommand;
-import net.evilblock.cubed.acf.annotation.CommandAlias;
 import org.bukkit.entity.Player;
 
 /**
@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 public class ChallengesCommand extends ScalaCommand {
 
     @CommandAlias("challenge|challenges")
-    public void onDefault(Player player) {
+    public void onChallenges(Player player) {
         new ChallengeViewMenu().openMenu(player);
     }
 }

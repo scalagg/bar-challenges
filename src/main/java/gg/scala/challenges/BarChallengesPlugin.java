@@ -1,5 +1,6 @@
 package gg.scala.challenges;
 
+import gg.scala.challenges.command.ChallengesCommand;
 import gg.scala.challenges.commons.PlayerCache;
 import gg.scala.challenges.commons.impl.BasicPlayerCache;
 import gg.scala.challenges.handler.ChallengeHandler;
@@ -7,7 +8,9 @@ import gg.scala.challenges.handler.DataTrackerHandler;
 import gg.scala.challenges.handler.MongoHandler;
 import gg.scala.challenges.model.ChallengePlayer;
 import gg.scala.commons.ExtendedScalaPlugin;
+import gg.scala.commons.annotations.commands.ManualRegister;
 import gg.scala.commons.annotations.container.ContainerEnable;
+import gg.scala.commons.command.ScalaCommandManager;
 import lombok.Getter;
 import net.evilblock.cubed.util.ClassUtils;
 import org.bukkit.event.Listener;

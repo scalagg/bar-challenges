@@ -79,8 +79,9 @@ public class ChallengePlayer {
         return document;
     }
 
-    private void loadPlayerData() {
-        CompletableFuture.supplyAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
+    public CompletableFuture<Void> loadPlayerData() {
+        return CompletableFuture
+            .supplyAsync(() -> BarChallengesPlugin.getInstance().getMongoHandler().getPlayerCollection().find(Filters.eq("uuid", this.uuid.toString())).first())
                 .thenAccept(document -> {
                     if (document == null) {
                         this.resetAndAddDefaultDataTrackers();

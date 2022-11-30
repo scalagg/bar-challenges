@@ -27,6 +27,12 @@ public class ChallengeViewMenu extends PaginatedMenu {
         setPlaceholdBorders(true);
     }
 
+    @NotNull
+    @Override
+    public List<Integer> getAllPagesButtonSlots() {
+        return Arrays.asList(10, 11, 12, 13, 14, 15, 16);
+    }
+
     @Override
     public int size(@NotNull Map<Integer, ? extends Button> buttons) {
         return 27;
@@ -44,15 +50,8 @@ public class ChallengeViewMenu extends PaginatedMenu {
         final Map<Integer, Button> buttonMap = new HashMap<>();
         final ChallengePlayer challengePlayer = BarChallengesPlugin.getInstance().getPlayerHandler().getByPlayer(player);
 
-        final int[] current = {0};
         BarChallengesPlugin.getInstance().getChallengeHandler().getRegisteredChallenges().forEach(dailyChallenge -> {
-            if (current[0] == 8 || current[0] == 17 || current[0] == 26) {
-                current[0] = current[0] + 2;
-            } else {
-                current[0]++;
-            }
-
-            buttonMap.put(current[0], new ChallengeButton(dailyChallenge, challengePlayer));
+            buttonMap.put(buttonMap.size(), new ChallengeButton(dailyChallenge, challengePlayer));
         });
 
         return buttonMap;
@@ -83,10 +82,10 @@ public class ChallengeViewMenu extends PaginatedMenu {
                     .forEach(stringList::add);
 
             stringList.add(" ");
-            stringList.add(hasCompleted ? ChatColor.GREEN + "You've completed this challenge." : ChatColor.YELLOW + "You're working on this challenge.");
+            stringList.add(hasCompleted ? ChatColor.LIGHT_PURPLE + "You've completed this challenge." : ChatColor.GREEN + "You're working on this challenge.");
 
             return new ItemBuilder(Material.INK_SACK)
-                    .name(CC.D_AQUA + this.dailyChallenge.getName())
+                    .name(CC.B_GOLD + this.dailyChallenge.getName())
                     .data((short) (hasCompleted ? 10 : 8))
                     .setLore(stringList).build();
         }

@@ -5,9 +5,7 @@ import gg.scala.challenges.reward.ChallengeReward;
 import gg.scala.challenges.reward.impl.ExperienceReward;
 import gg.scala.challenges.tracker.DataTracker;
 import gg.scala.challenges.tracker.impl.KillsDataTracker;
-import lombok.var;
 import net.evilblock.cubed.util.CC;
-import org.bukkit.ChatColor;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,8 +30,8 @@ public class TenKillsChallenge implements DailyChallenge<Integer> {
     @Override
     public String[] getDescription() {
         return new String[]{
-                CC.SEC + "Start off the day with getting 10",
-                CC.SEC + "kills on any ladders and any queues."
+                CC.GRAY + "Start off the day with getting 10",
+                CC.GRAY + "kills on any ladders and any queues."
         };
     }
 
